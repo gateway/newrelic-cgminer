@@ -13,25 +13,34 @@ class UnavailableException(Exception):
 
 class Cgminer:
 
-	def __init__(self, ip, port):
+	def __init__(self, ip, port, verbose):
 		LOGGER.info('CGminer IP: %s', ip)
 		self.ip = ip
 		
 		LOGGER.info('CGminer port: %d', port)
 		self.port = port
+		self.verbose = verbose
 	
 	
 	def send_command(self, command):
 		try:
 			s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 			s.connect((self.ip, int(self.port)))
-			s.send(json.dumps({'command': command}))
+			
+			request = json.dumps({'command': command})
+			if self.verbose:
+				LOGGER.info('Request: %s', request)
+			
+			s.send(request)
 		
 			response = self.linesplit(s)
 		except socket.error:
 			raise UnavailableException('CGminer unavailable')
 		
 		s.close()
+		
+		if self.verbose:
+			LOGGER.info('Response: %s', response)
 		
 		response = response.replace('\x00', '')
 		response = json.loads(response)

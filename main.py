@@ -82,11 +82,12 @@ parser = argparse.ArgumentParser(description='Sends CGminer status to New Relic'
 parser.add_argument('licence_key', help='New Relic licence key')
 parser.add_argument('--cgminer_ip', dest='cgminer_ip', nargs='?', default='127.0.0.1', help='CGminer IP. Default is 127.0.0.1')
 parser.add_argument('--cgminer_port', dest='cgminer_port', nargs='?', type=int, default=4028, help='CGminer port. Default is 4028')
+parser.add_argument('--verbose', dest='verbose', action='store_true', help='Prints debugging information')
 
 args = parser.parse_args()
 
 new_relic = newrelic.Agent(args.licence_key)
-cgminer = miner.Cgminer(args.cgminer_ip, args.cgminer_port)
+cgminer = miner.Cgminer(args.cgminer_ip, args.cgminer_port, args.verbose)
 
 try:
 	run()
