@@ -1,7 +1,11 @@
 import sys
 import socket
 import threading
+import logging
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
+
+logging.basicConfig(format='MOCK [%(asctime)-15s] %(message)s', level=logging.INFO)
+LOGGER = logging.getLogger(__name__)
 
 def load_data(file_name):
 
@@ -29,7 +33,7 @@ class MockCgminer():
 	
 
 	def start(self):
-		print 'Running mock CGminer'
+		LOGGER.info('Running mock CGminer')
 		backlog = 5
 		size = 1024
 		self.listen = True
@@ -48,7 +52,7 @@ class MockCgminer():
 		s.close()
 
 	def stop(self):
-		print 'Stopping CGminer'
+		LOGGER.info('Stopping CGminer')
 		self.listen = False
 		socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect((self.hostname, self.port))
 
@@ -58,7 +62,7 @@ response_codes = [500, 503, 505, 403]
 class MockNewRelicRequestHandler(BaseHTTPRequestHandler):
 
 	def do_POST(self):
-		print 'POST', self.path
+		LOGGER.info('POST %s', self.path)
 		
 		if len(response_codes):
 			code = response_codes.pop(0)
@@ -74,7 +78,7 @@ class MockNewRelicRequestHandler(BaseHTTPRequestHandler):
 			self.init_shutdown()
 	
 	def init_shutdown(self):
-		print 'Shutting down the New Relic mock server'
+		LOGGER.info('Shutting down the New Relic mock server')
 		assassin = threading.Thread(target=self.shutdown)
 		assassin.daemon = True
 		assassin.start()
@@ -85,7 +89,7 @@ class MockNewRelicRequestHandler(BaseHTTPRequestHandler):
 
 
 def mock_newrelic():
-	print 'Running mock New Relic'
+	LOGGER.info('Running mock New Relic')
 	server_address = ('127.0.0.1', 6666)
 	httpd = HTTPServer(server_address, MockNewRelicRequestHandler)
 	httpd.serve_forever()
@@ -105,7 +109,7 @@ def start():
 	t2.join()
 
 file_name = sys.argv[1]
-print 'File:', file_name
+LOGGER.info('File: %s', file_name)
 data_map = load_data(file_name)
 
 cgminer = MockCgminer()
