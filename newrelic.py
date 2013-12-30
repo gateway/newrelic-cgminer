@@ -12,13 +12,12 @@ LOGGER.setLevel(logging.INFO)
 __version__ = '1.0.0'
 
 class Agent:
-
-	PLATFORM_URL = 'https://platform-api.newrelic.com/platform/v1/metrics'
 	GUID = 'com.github.2ndalpha.newrelic-cgminer'
 
-	def __init__(self, licence_key):
+	def __init__(self, url, licence_key):
 		LOGGER.debug('Created New Relic Agent')
 		
+		self.url = url
 		self.http_headers = {'Accept': 'application/json',
                              'Content-Type': 'application/json',
                              'X-License-Key': licence_key}
@@ -37,7 +36,7 @@ class Agent:
 		body = {'agent': self.agent_data, 'components': components}
 		
 		try:
-			response = requests.post(self.PLATFORM_URL,
+			response = requests.post(self.url,
 									headers=self.http_headers,
 									data=json.dumps(body, ensure_ascii=False),
 									verify=True)
