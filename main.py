@@ -37,10 +37,10 @@ def run():
 	while True:
 		try:
 			process()
-			time.sleep(60)
+			time.sleep(30)
 		except miner.UnavailableException:
-			LOGGER.warn('CGminer is not available. Waiting 60 seconds')
-			time.sleep(60)
+			LOGGER.warn('CGminer is not available. Waiting 30 seconds')
+			time.sleep(30)
 
 
 def print_general_info():

@@ -31,7 +31,7 @@ class Agent:
 		LOGGER.debug('Sending %d metrics', len(metrics))
 		
 		components = list()
-		components.append({'name': socket.gethostname(), 'guid':self.GUID, 'duration': 60, 'metrics':metrics})
+		components.append({'name': socket.gethostname(), 'guid':self.GUID, 'duration': 30, 'metrics':metrics})
 		
 		body = {'agent': self.agent_data, 'components': components}
 		
