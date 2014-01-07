@@ -88,7 +88,7 @@ parser.add_argument('--verbose', dest='verbose', action='store_true', help='Prin
 
 args = parser.parse_args()
 
-new_relic = newrelic.Agent(args.newrelic_url, args.licence_key)
+new_relic = newrelic.Agent(args.newrelic_url, args.licence_key, args.verbose)
 cgminer = miner.Cgminer(args.cgminer_ip, args.cgminer_port, args.verbose)
 
 try:

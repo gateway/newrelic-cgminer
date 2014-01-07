@@ -14,10 +14,11 @@ __version__ = '1.0.0'
 class Agent:
 	GUID = 'com.github.2ndalpha.newrelic-cgminer'
 
-	def __init__(self, url, licence_key):
+	def __init__(self, url, licence_key, verbose):
 		LOGGER.debug('Created New Relic Agent')
 		
 		self.url = url
+		self.verbose = verbose
 		self.http_headers = {'Accept': 'application/json',
                              'Content-Type': 'application/json',
                              'X-License-Key': licence_key}
@@ -32,6 +33,8 @@ class Agent:
 		
 		components = list()
 		components.append({'name': socket.gethostname(), 'guid':self.GUID, 'duration': 30, 'metrics':metrics})
+		if self.verbose:
+			LOGGER.info(components)
 		
 		body = {'agent': self.agent_data, 'components': components}
 		
