@@ -58,13 +58,17 @@ def print_general_info():
 def process():
 	devices = cgminer.send_command('devs')
 	metrics = {}
+	max_temperature = 0
 	
 	for device in devices:
 		gpu_id = device['GPU']
+		temperature = device['Temperature']
+		if temperature > max_temperature:
+			max_temperature = temperature
 		
 		metrics["Component/FanSpeed/GPU#%d" % (gpu_id)] = device['Fan Speed']
 		metrics["Component/FanSpeedPercentage/GPU#%d" % (gpu_id)] = device['Fan Percent']
-		metrics["Component/Temperature/GPU#%d" % (gpu_id)] = device['Temperature']
+		metrics["Component/Temperature/GPU#%d" % (gpu_id)] = temperature
 		metrics["Component/MHS/GPU#%d" % (gpu_id)] = device['MHS 5s']
 		
 		metrics["Component/RejectedPercentage/GPU#%d" % (gpu_id)] = device['Device Rejected%']
@@ -73,6 +77,7 @@ def process():
 		metrics["Component/Voltage/GPU#%d" % (gpu_id)] = device['GPU Voltage']
 		metrics["Component/Clock/GPU#%d" % (gpu_id)] = device['GPU Clock']
 
+	metrics['Component/MaxTemperature'] = max_temperature
 	fill_summary_metrics(metrics)
 	fill_coin_metrics(metrics)
 	new_relic.send(metrics)
