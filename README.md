@@ -11,10 +11,11 @@ Currently newrelic-cgminer works only with Python 2.6 or 2.7 in Linux. Windows s
 
 1. Create a [New Relic](https://www.newrelic.com) account (It's free!)
 2. Fetch licence key from New Relic account settings page
-3. In your miner box run `git clone https://github.com/2ndalpha/newrelic-cgminer.git`
-4. Navigate to newrelic-cgminer folder and run `pip install -r requirements.txt` to install dependencies
-5. Run `python main.py <LICENCE_KEY>`
-6. In few minutes "CGMiner" tab will appear in New Relic where you can see all the stats
+3. In your miner box edit your CGMiner startup script and add flag `--api-listen`. It will allow newrelic-cgminer to listen for your CGMiner statistics
+4. Run `git clone https://github.com/2ndalpha/newrelic-cgminer.git`
+5. Navigate to newrelic-cgminer folder and run `pip install -r requirements.txt` to install dependencies
+6. Run `python main.py <LICENCE_KEY>`
+7. In few minutes "CGMiner" tab will appear in New Relic where you can see all the stats
 
 ### Running on boot
 The easyest way to run newrelic-cgminer on boot-time is to add it to the crontab.
