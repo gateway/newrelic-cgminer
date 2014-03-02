@@ -44,8 +44,11 @@ def run():
 
 
 def print_general_info():
-	version = cgminer.send_command('version')[0]['CGMiner']
-	LOGGER.info('cgminer v %s', version)
+	version_container = cgminer.send_command('version')[0]
+	if 'CGMiner' in version_container:
+		LOGGER.info('cgminer v %s', version_container['CGMiner'])
+	elif 'SGMiner' in version_container:
+		LOGGER.info('sgminer v %s', version_container['SGMiner'])
 	
 	devices = cgminer.send_command('devdetails')
 	for device in devices:
