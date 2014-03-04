@@ -12,7 +12,7 @@ LOGGER.setLevel(logging.INFO)
 __version__ = '0.0.9'
 
 class Agent:
-        GUID = 'com.github.gateway.newrelic-cgminer'
+        GUID = 'com.github.gateway.newrelic-cgminer-asic'
 
         def __init__(self, url, licence_key, verbose):
                 LOGGER.debug('Created New Relic Agent')
