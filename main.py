@@ -36,7 +36,7 @@ def run():
         while True:
                 try:
                         process()
-                        time.sleep(15)
+                        time.sleep(1)
                 except miner.UnavailableException:
                         LOGGER.warn('CGminer is not available. Waiting 15 seconds')
                         time.sleep(15)
@@ -73,9 +73,10 @@ def process():
                                 #print temp
                                 #print devices
                                 for count in [0, 1, 2, 3]:
-                                    metrics["Component/BoardTemperature/STATS#%d" % (count)] = device['Asic%d board temperature' %count]
+                                    metrics["Component/BoardTemperature/ASIC#%d" % (count)] = device['Asic%d board temperature' %count]
                                     metrics["Component/DieTemperature/ASIC#%d" % (count)] = device['Asic%d die temperature' %count]
                                     metrics["Component/HashClockrate/ASIC#%d" % (count)] = device['Asic%d hash clockrate' %count]
+                                    metrics["Component/Voltage/ASIC#%d" % (count)] = device['Asic%d voltage 0' %count]
                                 metrics["Component/BaseClockrate/STATS#%d" % (stats_id)] = device['base clockrate']
                                 metrics["Component/FanPercent/STATS#%d" % (stats_id)] = device['fan percent']
         devices = cgminer.send_command('devs')
