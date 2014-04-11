@@ -58,9 +58,27 @@ def print_general_info():
 
 
 def process():
-        devices = cgminer.send_command('devs')
+        devices = cgminer.send_command('stats')
         #print devices
         metrics = {}
+        max_temperature = 0
+
+        for device in devices:
+                #print devices
+                #print device
+                stats_id = device['STATS']
+                if 'sequence modulus' in device:
+                          temp = device['Asic1 die temperature']
+                          if temp >= 50 and temp <= 150:
+                                #print temp
+                                #print devices
+                                for count in [0, 1, 2, 3]:
+                                    metrics["Component/BoardTemperature/STATS#%d" % (count)] = device['Asic%d board temperature' %count]
+                                    metrics["Component/DieTemperature/ASIC#%d" % (count)] = device['Asic%d die temperature' %count]
+                                    metrics["Component/HashClockrate/ASIC#%d" % (count)] = device['Asic%d hash clockrate' %count]
+                                metrics["Component/BaseClockrate/STATS#%d" % (stats_id)] = device['base clockrate']
+                                metrics["Component/FanPercent/STATS#%d" % (stats_id)] = device['fan percent']
+        devices = cgminer.send_command('devs')
         max_temperature = 0
 
         for device in devices:
@@ -70,16 +88,10 @@ def process():
                 if temperature > max_temperature:
                         max_temperature = temperature
                 if device['Enabled'] == 'Y':
-                        #metrics["Component/FanSpeed/ASC#%d" % (asc_id)] = device['Temperature']
-                        #metrics["Component/FanSpeedPercentage/ASC#%d" % (asc_id)] = device['Fan Percent']
                         metrics["Component/Temperature/ASC#%d" % (asc_id)] = device['Temperature']
                         metrics["Component/MHS/ASC#%d" % (asc_id)] = device['MHS 5s']
-
                         metrics["Component/RejectedPercentage/ASC#%d" % (asc_id)] = device['Device Rejected%']
                         metrics["Component/HardwareErrors/ASC#%d" % (asc_id)] = device['Hardware Errors']
-                        #metrics["Component/Memory/ASC#%d" % (asc_id)] = device['Memory Clock']
-                        #metrics["Component/Voltage/ASC#%d" % (asc_id)] = device['ASC Voltage']
-                        #metrics["Component/Clock/ASC#%d" % (asc_id)] = device['ASC Clock']
 
         metrics['Component/MaxTemperature'] = max_temperature
         fill_summary_metrics(metrics)
@@ -103,4 +115,3 @@ try:
         run()
 except KeyboardInterrupt:
         LOGGER.debug('Closing the application')
-
