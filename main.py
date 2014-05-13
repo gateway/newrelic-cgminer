@@ -68,7 +68,7 @@ def process():
                 #print device
                 stats_id = device['STATS']
                 if 'sequence modulus' in device:
-                          temp = device['Asic1 die temperature']
+                          temp = device.get('Asic2 die temperature', 0)
                           if temp >= 50 and temp <= 150:
                                 #print temp
                                 #print devices
@@ -116,3 +116,4 @@ try:
         run()
 except KeyboardInterrupt:
         LOGGER.debug('Closing the application')
+
